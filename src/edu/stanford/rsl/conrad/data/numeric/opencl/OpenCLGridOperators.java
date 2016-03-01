@@ -90,7 +90,7 @@ public class OpenCLGridOperators extends NumericGridOperator {
 					programFile = OpenCLGridOperators.class.getResourceAsStream(kernelFile);
 				}
 				else {
-					 programFile = new SequenceInputStream(OpenCLGridOperators.class.getResourceAsStream(kernelFile), OpenCLGridOperators.class.getResourceAsStream(extendedKernelFile));
+					 programFile = new SequenceInputStream(OpenCLGridOperators.class.getResourceAsStream(kernelFile), getExtendedCLResourceAsStream());
 				}
 								
 				try {
@@ -1007,61 +1007,5 @@ public class OpenCLGridOperators extends NumericGridOperator {
 				runKernel("divergencez", device, clmemGrid,clmemGridBuf, zOffset, new int[]{gridRes.getSize()[0], gridRes.getSize()[1],gridRes.getSize()[2]});
 			}
 		}
-	}
-	
-	//TODO: Check the methods getAllInstances, getAllOpenCLGridOperatorProgramsAsString, and getCompleteRessourceAsString why they are necessary. 
-	
-	/**
-	 * Auxiliary method that lists all instances of GridOperators
-	 * Users can derive from OpenCLGridOperators and define their cl-file path
-	 * in the field "programFile"
-	 * 
-	 * Make sure that you add an instance of your personal OpenCLGridOperators in this method
-	 * @return All instances of existing OpenCLGridOperator classes
-	 */
-	public static OpenCLGridOperators[] getAllInstances(){
-		// TODO: replace with automatic search on java class path
-		// Problem is that this might be really slow. // Comment by Michael Dorner: It IS very slow.
-		return new OpenCLGridOperators[]{
-				new OpenCLGridOperators() 	// Comment by Michael Dorner: GridOperators are singletons. Therefore we should see any constructor in there. Additionally, why creating an array with only one entry?
-
-		};
-	}
-
-	
-	/**
-	 * Obtains all OpenCLGridOperators instances and concatenates all related 
-	 * cl-source files to one long string
-	 * @return Concatenated cl-source code
-	 */
-	public String getAllOpenCLGridOperatorProgramsAsString(){
-		String out = "";
-		OpenCLGridOperators[] instances = getAllInstances();
-		for (int i = 0; i < instances.length; i++) {
-			try {
-				out += instances[i].getCompleteRessourceAsString();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return out;
-	}
-
-	/**
-	 * Reads a cl-program file and returns it as String
-	 * @return A cl-program file as String
-	 * @throws IOException
-	 */
-	protected String getCompleteRessourceAsString() throws IOException{
-		InputStream inStream = this.getClass().getResourceAsStream(kernelFile);
-		BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
-		String content = "";
-		String line = br.readLine();
-		while (line != null){
-			content += line + "\n";
-			line = br.readLine();
-		};
-		return content;
 	}
 }
