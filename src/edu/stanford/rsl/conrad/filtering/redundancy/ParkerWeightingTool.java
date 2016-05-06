@@ -208,7 +208,7 @@ public class ParkerWeightingTool extends IndividualImageFilteringTool {
 				if (debug) {
 					System.out.println("Angular Range: " + range * 180 / Math.PI + "\n MaxRange: " + maxRange *180 / Math.PI + "\nProjections: " + primaryAngles.length + " " + numberOfProjections);
 				}
-				//offset = (maxRange - range) /2;
+				offset = (maxRange - range) /2;
 				//offset = 0.001;
 				//delta *= 0.5;
 				//offset -= (0.9 / 180) * Math.PI;

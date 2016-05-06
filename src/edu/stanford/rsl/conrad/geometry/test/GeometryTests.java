@@ -125,20 +125,23 @@ public class GeometryTests {
 		geom.setDetectorHeight(480);
 		geom.setSourceToAxisDistance(800);
 		geom.setTrajectory(200, 800, 1, 0, 0, Projection.CameraAxisDirection.DETECTORMOTION_PLUS, Projection.CameraAxisDirection.ROTATIONAXIS_PLUS, new SimpleVector(0,0,1));
-		PointND isocenter = geom.computeIsoCenter();
+		PointND isocenter = geom.computeIsoCenterSolve();
 		// Check consistency:
 		ArrayList<PointND> testList1 = new ArrayList<PointND>();
 		ArrayList<PointND> testList2 = new ArrayList<PointND>();
+		ArrayList<PointND> testList3 = new ArrayList<PointND>();
 		for (int i = 0; i < 100; i++){
 			testList1.add(geom.computeIsoCenterOld());
 			testList2.add(geom.computeIsoCenter());
+			testList3.add(geom.computeIsoCenterSolve());
 		}
 		for (int i = 0; i < 100; i++){
 			System.out.println(testList1.get(i));
 			System.out.println(testList2.get(i));
+			System.out.println(testList3.get(i));
 		}
-		System.out.println(DoublePrecisionPointUtil.getGeometricCenter(testList1) + " " + DoublePrecisionPointUtil.getGeometricCenter(testList2));
-		System.out.println(DoublePrecisionPointUtil.getStandardDeviation(testList1) + " " + DoublePrecisionPointUtil.getStandardDeviation(testList2));
+		System.out.println(DoublePrecisionPointUtil.getGeometricCenter(testList1) + " " + DoublePrecisionPointUtil.getGeometricCenter(testList2) + " " + DoublePrecisionPointUtil.getGeometricCenter(testList3));
+		System.out.println(DoublePrecisionPointUtil.getStandardDeviation(testList1) + " " + DoublePrecisionPointUtil.getStandardDeviation(testList2) + " " + DoublePrecisionPointUtil.getStandardDeviation(testList3));
 		// iso center new is way more stable:
 		System.out.println(isocenter);
 		Assert.assertEquals(new PointND(0,0,0), isocenter);
